@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="id" data-phase="pagi" data-theme="pink" data-motion="full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Berbie &amp; Tom — Permainan Merawat Karakter</title>
+    <meta
+      name="description"
+      content="Perawatan virtual dua karakter: Berbie si Barbie dan Tom si Panda. Pilih karaktermu, beri makan, mandikan, ajak bermain, dan tidur dengan siklus jam pagi-siang-sore-malam yang berjalan realtime."
+    />
+    <meta name="theme-color" content="#1a1420" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap"
+      />
+    </noscript>
+    <link rel="stylesheet" href="src/styles/tokens.css" />
+    <link rel="stylesheet" href="src/styles/base.css" />
+    <link rel="stylesheet" href="src/styles/character.css" />
+    <link rel="stylesheet" href="src/styles/scene.css" />
+    <link rel="stylesheet" href="src/styles/game.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#dock">Lompat ke tombol aksi</a>
+
+    <!-- ====== DEF: gradien, pola, filter (dipakai semua SVG di dokumen) ====== -->
+    <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="gradFurLight" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fffdfd" />
+          <stop offset="0.55" stop-color="#f6eef3" />
+          <stop offset="1" stop-color="#e2d2de" />
+        </linearGradient>
+        <linearGradient id="gradFurDark" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3a2f3d" />
+          <stop offset="0.5" stop-color="#241d28" />
+          <stop offset="1" stop-color="#120d16" />
+        </linearGradient>
+        <linearGradient id="gradSkin" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffe8d8" />
+          <stop offset="0.6" stop-color="#fdd2bb" />
+          <stop offset="1" stop-color="#eab79f" />
+        </linearGradient>
+        <linearGradient id="gradHair" x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0" stop-color="#ffe9a8" />
+          <stop offset="0.45" stop-color="#f7cf6b" />
+          <stop offset="1" stop-color="#d9a63f" />
+        </linearGradient>
+        <radialGradient id="gradBubble" cx="0.35" cy="0.3" r="0.75">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.95" />
+          <stop offset="0.55" stop-color="#ffd9ee" stop-opacity="0.55" />
+          <stop offset="1" stop-color="#a7e6ff" stop-opacity="0.35" />
+        </radialGradient>
+        <linearGradient id="gradDirt" x1="0" y1="0" x2="0.6" y2="1">
+          <stop offset="0" stop-color="#6b5540" />
+          <stop offset="1" stop-color="#3f2f22" />
+        </linearGradient>
+        <linearGradient id="gradPink" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ff9ec4" />
+          <stop offset="1" stop-color="#ff2e97" />
+        </linearGradient>
+        <linearGradient id="gradNoir" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#372c3b" />
+          <stop offset="1" stop-color="#150f1a" />
+        </linearGradient>
+        <linearGradient id="gradWall" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffd9e8" />
+          <stop offset="0.5" stop-color="#ffc4dd" />
+          <stop offset="1" stop-color="#f3a9c8" />
+        </linearGradient>
+        <linearGradient id="gradWallNoir" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2c2230" />
+          <stop offset="1" stop-color="#160f1c" />
+        </linearGradient>
+        <linearGradient id="gradFloor" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#4a3245" />
+          <stop offset="1" stop-color="#241826" />
+        </linearGradient>
+        <linearGradient id="gradFloorNoir" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2a2130" />
+          <stop offset="1" stop-color="#100b14" />
+        </linearGradient>
+        <linearGradient id="gradBlanket" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ff8ec7" />
+          <stop offset="1" stop-color="#c9418a" />
+        </linearGradient>
+        <linearGradient id="gradWater" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#bff0ff" stop-opacity="0.92" />
+          <stop offset="1" stop-color="#5cc9f0" stop-opacity="0.85" />
+        </linearGradient>
+        <linearGradient id="gradWood" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#7b5a6b" />
+          <stop offset="1" stop-color="#4a3447" />
+        </linearGradient>
+        <radialGradient id="gradLampGlow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#ffe6a8" stop-opacity="0.85" />
+          <stop offset="0.55" stop-color="#ffb6d5" stop-opacity="0.28" />
+          <stop offset="1" stop-color="#ffb6d5" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="gradSun" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#fff7d8" />
+          <stop offset="0.6" stop-color="#ffd166" />
+          <stop offset="1" stop-color="#ff9e57" />
+        </radialGradient>
+        <radialGradient id="gradMoon" cx="0.4" cy="0.35" r="0.7">
+          <stop offset="0" stop-color="#fff6ff" />
+          <stop offset="0.7" stop-color="#e3d4ff" />
+          <stop offset="1" stop-color="#b9a4e8" />
+        </radialGradient>
+        <linearGradient id="gradSkyPagi" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffd9e8" />
+          <stop offset="0.55" stop-color="#ffe7c7" />
+          <stop offset="1" stop-color="#c7e9ff" />
+        </linearGradient>
+        <linearGradient id="gradSkySiang" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#7fd0ff" />
+          <stop offset="0.6" stop-color="#b9e7ff" />
+          <stop offset="1" stop-color="#eaf8ff" />
+        </linearGradient>
+        <linearGradient id="gradSkySore" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ff9e7a" />
+          <stop offset="0.55" stop-color="#ffbe8f" />
+          <stop offset="1" stop-color="#ff9ec4" />
+        </linearGradient>
+        <linearGradient id="gradSkyMalam" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#1b1230" />
+          <stop offset="0.55" stop-color="#33204a" />
+          <stop offset="1" stop-color="#120b1c" />
+        </linearGradient>
+        <pattern id="patDots" width="46" height="46" patternUnits="userSpaceOnUse">
+          <circle cx="12" cy="12" r="3.2" fill="#ffffff" opacity="0.22" />
+          <circle cx="35" cy="34" r="2.2" fill="#ffffff" opacity="0.16" />
+          <path d="M0 46 L23 23 L46 46" stroke="#ffffff" stroke-width="1.2" fill="none" opacity="0.1" />
+        </pattern>
+        <pattern id="patHearts" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path
+            d="M30 40 C12 28 14 14 22 14 C27 14 30 19 30 19 C30 19 33 14 38 14 C46 14 48 28 30 40 Z"
+            fill="#ffffff"
+            opacity="0.13"
+          />
+        </pattern>
+        <pattern id="patPlanks" width="120" height="34" patternUnits="userSpaceOnUse">
+          <rect width="120" height="34" fill="none" />
+          <path d="M0 33 H120 M60 0 V34" stroke="#ffffff" stroke-opacity="0.07" stroke-width="2" />
+        </pattern>
+        <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#1a0f18" flood-opacity="0.35" />
+        </filter>
+        <filter id="blurSm" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="6" />
+        </filter>
+        <filter id="glowPink" x="-60%" y="-60%" width="220%" height="220%">
+          <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#ff5fae" flood-opacity="0.75" />
+        </filter>
+        <clipPath id="clipWindow">
+          <path d="M490 330 V190 a130 130 0 0 1 260 0 V330 Z" />
+        </clipPath>
+      </defs>
+    </svg>
+
+    <!-- ============ LAYAR 1: PILIH KARAKTER ============ -->
+    <section class="screen screen--welcome" id="screen-welcome" aria-labelledby="welcome-title">
+      <div class="welcome__bg" aria-hidden="true">
+        <span class="blob blob--1"></span>
+        <span class="blob blob--2"></span>
+        <span class="grid"></span>
+        <span class="spark spark--a"></span>
+        <span class="spark spark--b"></span>
+        <span class="spark spark--c"></span>
+      </div>
+
+      <div class="welcome" dir="auto">
+        <header class="welcome__head">
+          <p class="eyebrow"><span class="dot dot--pink"></span> Simulasi merawat · pink &amp; hitam</p>
+          <h1 id="welcome-title" class="welcome__title">
+            <span class="title-line">Berbie</span>
+            <span class="title-amp">&amp;</span>
+            <span class="title-line title-line--alt">Tom</span>
+          </h1>
+          <p class="welcome__lede">
+            Pilih satu karakter untuk kamu rawat sepanjang hari: beri makan, mandikan sampai kinclong, ajak bermain,
+            lalu temani tidur saat malam tiba. Jam di dalam kamar berjalan terus — pagi, siang, sore, dan malam.
+          </p>
+        </header>
+
+        <div class="picker" role="radiogroup" aria-label="Pilih karakter">
+          <p class="picker__hint" id="picker-hint">Pilih salah satu karakter untuk mulai bermain.</p>
+          <div class="picker__grid">
+            <button
+              type="button"
+              class="pick-card"
+              data-pick="panda"
+              role="radio"
+              aria-checked="false"
+              aria-describedby="panda-desc"
+            >
+              <span class="pick-card__glow" aria-hidden="true"></span>
+              <span class="pick-card__art" data-art="panda"></span>
+              <span class="pick-card__body">
+                <span class="pick-card__head">
+                  <span class="pick-card__name">Tom</span>
+                  <span class="pick-card__role">Panda Bambu</span>
+                </span>
+                <span class="pick-card__desc" id="panda-desc">
+                  Panda gemuk yang santai dan doyan bambu. Porsinya besar, cepat kotor, tapi paling gampang dibuat
+                  tertawa.
+                </span>
+                <span class="chip-row" data-stats="panda"></span>
+                <span class="pick-card__list">
+                  <span><i>🎋</i>Suka: bambu &amp; bubur hangat</span>
+                  <span><i>⚠️</i>Kurang suka: soda &amp; kopi</span>
+                </span>
+              </span>
+              <span class="pick-card__badge">Pilih Tom</span>
+            </button>
+
+            <button
+              type="button"
+              class="pick-card"
+              data-pick="barbie"
+              role="radio"
+              aria-checked="false"
+              aria-describedby="barbie-desc"
+            >
+              <span class="pick-card__glow" aria-hidden="true"></span>
+              <span class="pick-card__art" data-art="barbie"></span>
+              <span class="pick-card__body">
+                <span class="pick-card__head">
+                  <span class="pick-card__name">Berbie</span>
+                  <span class="pick-card__role">Barbie Fashionista</span>
+                </span>
+                <span class="pick-card__desc" id="barbie-desc">
+                  Boneka modis yang rajin dan wangi. Makan sedikit tapi sering, wajib kinclong, dan senang dipuji.
+                </span>
+                <span class="chip-row" data-stats="barbie"></span>
+                <span class="pick-card__list">
+                  <span><i>💖</i>Suka: kue stroberi &amp; salad berry</span>
+                  <span><i>⚠️</i>Kurang suka: gorengan &amp; bambu</span>
+                </span>
+              </span>
+              <span class="pick-card__badge">Pilih Berbie</span>
+            </button>
+          </div>
+
+          <form class="picker__name" id="name-form" autocomplete="off">
+            <label class="field">
+              <span class="field__label">Nama panggilan <span class="muted">(opsional)</span></span>
+              <input
+                type="text"
+                id="name-input"
+                name="name"
+                maxlength="14"
+                placeholder="Tom"
+                aria-describedby="name-help"
+              />
+            </label>
+            <p class="field__help" id="name-help">Kosongkan untuk memakai nama bawaan karakter.</p>
+          </form>
+
+          <div class="picker__actions">
+            <button type="button" class="btn btn--primary btn--lg" id="btn-start" disabled>
+              <span class="btn__icon" aria-hidden="true">▶</span>
+              <span class="btn__text">Mulai Bermain</span>
+            </button>
+            <button type="button" class="btn btn--ghost btn--lg" id="btn-continue" hidden>
+              <span class="btn__text">Lanjutkan permainan tersimpan</span>
+            </button>
+          </div>
+        </div>
+
+        <ul class="howto" aria-label="Cara bermain">
+          <li><span class="howto__n">1</span> Beri makan &amp; minum saat status Kenyang turun.</li>
+          <li><span class="howto__n">2</span> Mandikan: sikat semua noda lalu bilas.</li>
+          <li><span class="howto__n">3</span> Ajak main mini-game untuk Bahagia &amp; koin.</li>
+          <li><span class="howto__n">4</span> Jam 18:00 malam tiba — tidur 30 detik, otomatis pagi lagi.</li>
+        </ul>
+
+        <footer class="welcome__foot">
+          <span>Permainan berjalan di browsermu · progres tersimpan otomatis</span>
+          <button type="button" class="link-btn" id="btn-reset-welcome" hidden>Mulai ulang data lama</button>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ============ LAYAR 2: PERMAINAN ============ -->
+    <div class="screen screen--game" id="screen-game" hidden>
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">🎀</span>
+          <span class="brand__text">
+            <span class="brand__name">Berbie <span class="brand__amp">&amp;</span> Tom</span>
+            <span class="brand__sub" id="brand-sub">Kamar Pink &amp; Hitam</span>
+          </span>
+        </div>
+
+        <div class="clockchip" id="clock-chip" title="Jam kamar — berjalan realtime">
+          <span class="clockchip__icon" id="clock-icon" aria-hidden="true">🌅</span>
+          <span class="clockchip__time" id="clock-time">05:00</span>
+          <span class="clockchip__phase" id="clock-phase">Pagi</span>
+          <span class="clockchip__meta">
+            <span id="clock-real" class="clockchip__real" hidden>—</span>
+            <span class="clockchip__next" id="clock-next">Malam dalam 13 j 00 m</span>
+          </span>
+          <span class="daybar" title="Kemajuan hari: pagi → siang → sore → malam" aria-hidden="true">
+            <span class="daybar__seg daybar__seg--pagi"></span>
+            <span class="daybar__seg daybar__seg--siang"></span>
+            <span class="daybar__seg daybar__seg--sore"></span>
+            <span class="daybar__seg daybar__seg--malam"></span>
+            <span class="daybar__dot" id="day-dot"></span>
+          </span>
+        </div>
+
+        <div class="topstats">
+          <div class="pill" title="Hari ke-">
+            <span class="pill__icon" aria-hidden="true">📅</span>
+            <span class="pill__label">Hari</span>
+            <span class="pill__value" id="day-count">1</span>
+          </div>
+          <div class="pill pill--coin" title="Koin">
+            <span class="pill__icon" aria-hidden="true">🪙</span>
+            <span class="pill__value" id="coin-count">60</span>
+          </div>
+          <div class="levelbar" title="Level &amp; pengalaman">
+            <span class="levelbar__num" id="level-num">1</span>
+            <span class="levelbar__track"><span class="levelbar__fill" id="xp-fill"></span></span>
+            <span class="levelbar__text" id="xp-text">0 / 120 XP</span>
+          </div>
+          <div class="topstats__btns">
+            <button type="button" class="icon-btn" id="btn-sound" aria-pressed="true" title="Suara nyala/mati">
+              <span class="icon-btn__on" aria-hidden="true">🔊</span>
+              <span class="icon-btn__off" aria-hidden="true">🔇</span>
+              <span class="sr-only">Matikan suara</span>
+            </button>
+            <button type="button" class="icon-btn" id="btn-help" title="Cara bermain (H)">
+              <span aria-hidden="true">❔</span><span class="sr-only">Cara bermain</span>
+            </button>
+            <button type="button" class="icon-btn" id="btn-settings" title="Pengaturan">
+              <span aria-hidden="true">⚙️</span><span class="sr-only">Pengaturan</span>
+            </button>
+            <button type="button" class="icon-btn icon-btn--switch" id="btn-switch" title="Ganti karakter">
+              <span aria-hidden="true">🔄</span><span class="sr-only">Ganti karakter</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="stage-col">
+          <div class="stage" id="stage">
+            <svg class="scene" viewBox="0 0 1280 760" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="scene-title" aria-describedby="scene-desc">
+              <title id="scene-title">Kamar perawatan Berbie dan Tom</title>
+              <desc id="scene-desc">
+                Kamar dengan jendela, tempat tidur, meja makan kecil, dan bak mandi. Karakter berdiri di tengah dan
+                berpindah sesuai aktivitas.
+              </desc>
+
+              <!-- dinding & lantai -->
+              <g class="room">
+                <rect class="room__wall" x="0" y="0" width="1280" height="522" />
+                <rect class="room__pattern" x="0" y="0" width="1280" height="522" fill="url(#patDots)" />
+                <rect class="room__heartband" x="0" y="380" width="1280" height="142" fill="url(#patHearts)" />
+                <rect class="room__molding" x="0" y="500" width="1280" height="22" />
+                <rect class="room__floor" x="0" y="522" width="1280" height="238" />
+                <rect class="room__planks" x="0" y="522" width="1280" height="238" fill="url(#patPlanks)" />
+                <ellipse class="room__lightpool" cx="640" cy="640" rx="440" ry="120" />
+                <path class="room__sunbeam" d="M500 330 L790 330 L980 760 L250 760 Z" />
+              </g>
+
+              <!-- jendela + langit -->
+              <g class="window">
+                <path class="window__frame" d="M472 340 V188 a138 138 0 0 1 276 0 V340 Z" />
+                <g clip-path="url(#clipWindow)">
+                  <rect class="sky sky--pagi" x="480" y="50" width="280" height="300" />
+                  <rect class="sky sky--siang" x="480" y="50" width="280" height="300" />
+                  <rect class="sky sky--sore" x="480" y="50" width="280" height="300" />
+                  <rect class="sky sky--malam" x="480" y="50" width="280" height="300" />
+                  <g class="stars">
+                    <g fill="#fff8ff">
+                      <circle cx="530" cy="120" r="2.6" /><circle cx="588" cy="96" r="2" />
+                      <circle cx="646" cy="132" r="2.8" /><circle cx="700" cy="104" r="2.2" />
+                      <circle cx="742" cy="150" r="2.4" /><circle cx="512" cy="176" r="2" />
+                      <circle cx="604" cy="168" r="1.8" /><circle cx="672" cy="196" r="2.4" />
+                      <circle cx="734" cy="228" r="2" /><circle cx="556" cy="238" r="2.2" />
+                    </g>
+                    <path class="shooting" d="M700 120 l38 -18" stroke="#fff" stroke-width="2.4" stroke-linecap="round" />
+                  </g>
+                  <g class="celestial">
+                    <circle class="sun" cx="620" cy="150" r="34" fill="url(#gradSun)" />
+                    <g class="moon">
+                      <circle cx="620" cy="150" r="26" fill="url(#gradMoon)" />
+                      <circle cx="610" cy="144" r="5" fill="#cbb8ee" opacity=".55" />
+                      <circle cx="628" cy="158" r="3.4" fill="#cbb8ee" opacity=".45" />
+                      <circle cx="618" cy="164" r="2.6" fill="#cbb8ee" opacity=".4" />
+                    </g>
+                  </g>
+                  <g class="clouds" fill="#ffffff" opacity=".82">
+                    <g class="cloud cloud--1"><path d="M0 150 q14 -22 34 -10 q10 -18 30 -8 q22 -6 26 18 q-44 10 -90 0 Z" /></g>
+                    <g class="cloud cloud--2"><path d="M0 230 q16 -20 34 -8 q14 -16 30 -4 q18 -2 20 16 q-42 8 -84 -4 Z" /></g>
+                    <g class="cloud cloud--3"><path d="M0 288 q12 -14 26 -6 q12 -12 26 -2 q14 0 14 12 q-34 8 -66 -4 Z" /></g>
+                  </g>
+                  <path class="hills" d="M480 320 q60 -46 120 -18 q60 -34 120 6 v46 H480 Z" />
+                </g>
+                <path class="window__mullion" d="M620 52 V330 M480 214 H760" />
+                <path class="window__sill" d="M452 336 h316 l-14 22 H466 Z" />
+                <g class="curtain curtain--l">
+                  <path d="M436 100 q54 10 44 118 q-8 78 12 128 q-46 8 -66 -12 q14 -118 10 -234 Z" />
+                </g>
+                <g class="curtain curtain--r">
+                  <path d="M804 100 q-54 10 -44 118 q8 78 -12 128 q46 8 66 -12 q-14 -118 -10 -234 Z" />
+                </g>
+                <path class="curtain__rod" d="M424 96 h392" />
+              </g>
+
+              <!-- hiasan dinding -->
+              <g class="wall-decor">
+                <g class="frame frame--1">
+                  <rect x="120" y="120" width="150" height="112" rx="10" />
+                  <rect x="132" y="132" width="126" height="88" rx="6" />
+                  <path class="frame__heart" d="M195 158 c-16 -12 -30 -2 -30 10 c0 14 30 30 30 30 c0 0 30 -16 30 -30 c0 -12 -14 -22 -30 -10 Z" />
+                  <path class="frame__line" d="M146 206 q14 10 30 2" fill="none" stroke-width="3.4" stroke-linecap="round" />
+                  <path class="frame__line" d="M182 212 q16 6 32 -4" fill="none" stroke-width="3.4" stroke-linecap="round" />
+                </g>
+                <g class="frame frame--2">
+                  <rect x="292" y="176" width="112" height="150" rx="10" />
+                  <rect x="304" y="188" width="88" height="126" rx="6" />
+                  <path d="M348 300 v-56" stroke-width="5" />
+                  <path d="M348 254 q22 -12 26 -32 q-24 2 -26 32 Z" />
+                  <path d="M348 268 q-22 -12 -26 -32 q24 2 26 32 Z" />
+                </g>
+                <g class="shelf">
+                  <rect x="864" y="238" width="212" height="14" rx="6" />
+                  <path d="M892 252 l-12 34 M1048 252 l12 34" stroke-width="6" opacity=".5" />
+                  <rect x="884" y="188" width="16" height="50" rx="4" />
+                  <rect x="904" y="176" width="16" height="62" rx="4" />
+                  <rect x="924" y="196" width="14" height="42" rx="4" />
+                  <path d="M980 238 q-16 -30 4 -44 q22 -12 30 8 q14 -2 14 18 q0 18 -18 18 Z" opacity=".8" />
+                  <circle cx="1046" cy="216" r="22" opacity=".7" />
+                </g>
+                <g class="lamp">
+                  <path d="M1160 0 v110" stroke-width="4" opacity=".6" />
+                  <path class="lamp__shade" d="M1116 118 q44 -34 88 0 l-14 30 h-60 Z" />
+                  <circle class="lamp__bulb" cx="1160" cy="152" r="12" />
+                  <circle class="lamp__glow" cx="1160" cy="152" r="96" fill="url(#gradLampGlow)" />
+                </g>
+              </g>
+
+              <!-- tempat tidur -->
+              <g class="bed bed--back">
+                <rect x="36" y="316" width="52" height="248" rx="14" />
+                <path d="M52 336 q6 -46 34 -46 q30 0 34 46" opacity=".35" />
+                <rect class="bed__mattress" x="36" y="520" width="404" height="72" rx="18" />
+                <rect class="bed__sheet" x="46" y="512" width="384" height="40" rx="16" />
+                <path class="bed__pillow" d="M86 486 q62 -18 118 0 q10 26 -8 34 q-52 12 -104 0 q-16 -10 -6 -34 Z" />
+              </g>
+
+              <!-- meja makan -->
+              <g class="dining" transform="translate(78,6)">
+                <ellipse class="dining__shadow" cx="700" cy="700" rx="126" ry="22" />
+                <path class="dining__leg" d="M700 610 v72 M664 686 h72" />
+                <ellipse class="dining__base" cx="700" cy="688" rx="46" ry="12" />
+                <ellipse class="dining__top" cx="700" cy="600" rx="118" ry="34" />
+                <ellipse class="dining__top-in" cx="700" cy="594" rx="102" ry="25" />
+                <ellipse class="dining__plate" cx="658" cy="590" rx="32" ry="12" />
+                <ellipse class="dining__food" cx="658" cy="586" rx="19" ry="8" />
+                <path class="dining__bowl" d="M716 580 h44 q-4 22 -22 22 q-18 0 -22 -22 Z" />
+                <path class="dining__bowl-in" d="M720 582 h36 q-4 8 -18 8 q-14 0 -18 -8 Z" />
+                <rect class="dining__cup" x="690" y="558" width="20" height="24" rx="6" />
+                <path class="dining__cup-handle" d="M710 564 q12 6 0 13" fill="none" stroke-width="3" />
+                <path class="dining__steam" d="M695 550 q6 -8 0 -16 M705 550 q6 -8 0 -16" fill="none" stroke-width="2.6" stroke-linecap="round" />
+              </g>
+
+              <!-- lemari -->
+              <g class="wardrobe">
+                <rect x="1128" y="330" width="128" height="300" rx="12" />
+                <path d="M1192 340 v280" stroke-width="4" opacity=".4" />
+                <circle cx="1176" cy="482" r="6" opacity=".8" />
+                <circle cx="1208" cy="482" r="6" opacity=".8" />
+                <rect x="1140" y="292" width="104" height="40" rx="10" opacity=".55" />
+                <path d="M1160 312 h64" stroke-width="4" opacity=".5" />
+              </g>
+
+              <!-- karpet -->
+              <g class="rug">
+                <ellipse cx="620" cy="700" rx="290" ry="46" />
+                <ellipse class="rug__in" cx="620" cy="700" rx="212" ry="32" />
+                <ellipse class="rug__core" cx="620" cy="700" rx="120" ry="18" />
+              </g>
+
+              <!-- karakter -->
+              <g id="char-anchor" class="char-anchor" transform="translate(648,700)">
+                <g id="char-slot" class="char"></g>
+              </g>
+
+              <!-- depan: selimut, bak mandi, properti -->
+              <g class="bed bed--front">
+                <path class="bed__blanket" d="M188 516 q126 -22 252 8 q30 8 24 40 q-142 40 -292 8 q-14 -34 16 -56 Z" />
+                <path class="bed__blanket-fold" d="M188 548 q130 30 274 -4" fill="none" stroke-width="6" opacity=".5" />
+                <rect class="bed__base" x="36" y="586" width="404" height="58" rx="12" />
+                <path class="bed__foot" d="M428 644 v34 M52 644 v30" stroke-width="10" opacity=".7" />
+              </g>
+
+              <g class="tub tub--back">
+                <path class="tub__rim" d="M884 552 h300 q16 0 16 16 t-16 16 h-300 q-16 0 -16 -16 t16 -16 Z" />
+                <ellipse class="tub__water" cx="1034" cy="586" rx="140" ry="26" />
+              </g>
+              <g class="tub tub--front">
+                <path class="tub__body" d="M886 584 q0 96 26 118 q112 30 224 0 q26 -22 26 -118 q-138 44 -276 0 Z" />
+                <path class="tub__shine" d="M916 620 q6 62 26 82" fill="none" stroke-width="8" opacity=".35" />
+                <path class="tub__foot" d="M930 704 q-12 24 -2 34 M1140 704 q12 24 2 34" stroke-width="12" opacity=".7" />
+                <g class="duck" transform="translate(-92,-26)">
+                  <ellipse cx="1214" cy="596" rx="20" ry="14" />
+                  <circle cx="1228" cy="582" r="11" />
+                  <path d="M1237 582 l11 4 l-11 4 Z" />
+                  <circle cx="1230" cy="579" r="2.2" />
+                </g>
+                <g class="tub__foam">
+                  <circle cx="940" cy="586" r="14" /><circle cx="972" cy="580" r="10" />
+                  <circle cx="1090" cy="584" r="12" /><circle cx="1122" cy="578" r="9" />
+                  <circle cx="1030" cy="574" r="11" />
+                </g>
+              </g>
+
+              <g class="props">
+                <g class="plant">
+                  <path d="M70 728 q-30 -70 6 -118 q30 46 -6 118 Z" />
+                  <path d="M92 730 q40 -60 20 -110 q-42 42 -20 110 Z" />
+                  <path d="M78 726 q-6 -60 -44 -84 q-4 56 44 84 Z" />
+                  <path class="plant__pot" d="M40 728 h100 l-12 46 q-38 10 -76 0 Z" />
+                </g>
+                <g class="toys">
+                  <circle cx="866" cy="742" r="20" />
+                  <circle class="toys__hi" cx="860" cy="736" r="7" />
+                  <rect x="900" y="722" width="44" height="34" rx="8" />
+                  <path d="M908 730 h28" stroke-width="4" opacity=".6" />
+                </g>
+                <g class="slippers">
+                  <ellipse cx="360" cy="716" rx="30" ry="12" />
+                  <ellipse cx="404" cy="724" rx="30" ry="12" />
+                </g>
+              </g>
+
+              <g class="scene-veil" aria-hidden="true"><rect x="0" y="0" width="1280" height="760" /></g>
+            </svg>
+
+            <!-- lapisan partikel (hearts, remah, gelembung) -->
+            <div class="fx-layer" id="fx-layer" aria-hidden="true"></div>
+
+            <!-- kartu dialog & status cepat -->
+            <div class="stage__badges">
+              <p class="speech" id="speech" role="status" aria-live="polite" hidden></p>
+              <div class="moodtag" id="mood-tag" hidden>
+                <span class="moodtag__icon" aria-hidden="true">💖</span>
+                <span class="moodtag__text">Senang</span>
+              </div>
+            </div>
+
+            <!-- panel mode (mandi/main) -->
+            <div class="modebar" id="mode-bar" hidden>
+              <span class="modebar__icon" id="mode-icon" aria-hidden="true">🛁</span>
+              <span class="modebar__label" id="mode-label">Mode mandi</span>
+              <div class="modebar__meter"><span id="mode-fill"></span></div>
+              <span class="modebar__value" id="mode-value">0 / 8</span>
+              <button type="button" class="btn btn--small btn--primary" id="mode-action">Bilas</button>
+              <button type="button" class="btn btn--small btn--ghost" id="mode-exit">Keluar</button>
+            </div>
+
+            <!-- tirai tidur -->
+            <div class="sleepscreen" id="sleepscreen" hidden>
+              <div class="sleepscreen__card" role="dialog" aria-modal="true" aria-labelledby="sleep-title">
+                <p class="sleepscreen__moon" aria-hidden="true">🌙</p>
+                <h2 id="sleep-title" class="sleepscreen__title">Sudah malam — waktunya tidur</h2>
+                <p class="sleepscreen__sub" id="sleep-sub">Jam 18:00. Tom harus tidur 30 detik agar segar lagi.</p>
+                <div class="sleepscreen__ring">
+                  <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="ring-bg" cx="60" cy="60" r="52" />
+                    <circle class="ring-fg" cx="60" cy="60" r="52" id="sleep-ring" />
+                  </svg>
+                  <p class="sleepscreen__count" id="sleep-count" role="timer" aria-live="off">30</p>
+                </div>
+                <div class="sleepscreen__bars" id="sleep-bars"></div>
+                <p class="sleepscreen__note" id="sleep-note">Jangan tutup halaman sampai pagi ya.</p>
+              </div>
+            </div>
+
+            <!-- overlay mini-game -->
+            <div class="minigame" id="minigame" hidden>
+              <div class="minigame__hud">
+                <span class="minigame__label" id="mg-label">Tangkap item</span>
+                <span class="minigame__score">Skor <b id="mg-score">0</b></span>
+                <span class="minigame__time">⏱ <b id="mg-time">20</b>s</span>
+                <span class="minigame__best">Rekor <b id="mg-best">0</b></span>
+              </div>
+              <div class="minigame__arena" id="mg-arena"></div>
+              <div class="minigame__start" id="mg-start">
+                <p class="minigame__title" id="mg-title">Tangkap Cinta</p>
+                <p class="minigame__desc" id="mg-desc">
+                  Ketuk item yang jatuh. Jangan sentuh yang hitam — nanti sedih.
+                </p>
+                <button type="button" class="btn btn--primary btn--lg" id="mg-go">Mulai</button>
+                <button type="button" class="btn btn--ghost" id="mg-close">Nanti saja</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- dock aksi -->
+          <nav class="dock" id="dock" aria-label="Aksi perawatan">
+            <button type="button" class="act" data-act="makan">
+              <span class="act__key" aria-hidden="true">1</span>
+              <span class="act__icon" aria-hidden="true">🍱</span>
+              <span class="act__label">Beri Makan</span>
+              <span class="act__hint">Dapur &amp; toko</span>
+            </button>
+            <button type="button" class="act" data-act="mandi">
+              <span class="act__key" aria-hidden="true">2</span>
+              <span class="act__icon" aria-hidden="true">🛁</span>
+              <span class="act__label">Mandi</span>
+              <span class="act__hint">Sikat noda</span>
+            </button>
+            <button type="button" class="act" data-act="main">
+              <span class="act__key" aria-hidden="true">3</span>
+              <span class="act__icon" aria-hidden="true">🎈</span>
+              <span class="act__label">Bermain</span>
+              <span class="act__hint">Mini-game</span>
+            </button>
+            <button type="button" class="act" data-act="gaya">
+              <span class="act__key" aria-hidden="true">4</span>
+              <span class="act__icon" aria-hidden="true">🎀</span>
+              <span class="act__label">Gaya &amp; Toko</span>
+              <span class="act__hint">Busana, aksesori</span>
+            </button>
+            <button type="button" class="act act--sleep" data-act="tidur" aria-describedby="sleep-hint">
+              <span class="act__key" aria-hidden="true">5</span>
+              <span class="act__icon" aria-hidden="true">🌙</span>
+              <span class="act__label">Tidur</span>
+              <span class="act__hint" id="sleep-hint">Aktif saat malam</span>
+            </button>
+          </nav>
+        </section>
+
+        <aside class="side" aria-label="Status dan misi">
+          <section class="card card--status">
+            <header class="card__head">
+              <h2 class="card__title">Kondisi <span id="side-name">Tom</span></h2>
+              <p class="card__meta"><span id="side-age">Hari 1</span> · <span id="side-streak">Runtutan 0</span></p>
+            </header>
+            <div class="statlist" id="statlist"></div>
+            <p class="statlist__foot" id="stat-foot">Semua kebutuhan aman.</p>
+          </section>
+
+          <section class="card card--missions">
+            <header class="card__head">
+              <h2 class="card__title">Misi Hari Ini</h2>
+              <p class="card__meta" id="missions-meta">0/4 selesai</p>
+            </header>
+            <ul class="missionlist" id="mission-list"></ul>
+            <button type="button" class="btn btn--ghost btn--full" id="btn-report">Laporan harian</button>
+          </section>
+
+          <section class="card card--log">
+            <header class="card__head">
+              <h2 class="card__title">Catatan Kamar</h2>
+              <p class="card__meta" id="log-meta">sesi ini</p>
+            </header>
+            <ul class="loglist" id="log-list" aria-live="polite"></ul>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="gamefoot">
+        <span>Progres tersimpan otomatis di perangkat ini.</span>
+        <span class="gamefoot__dot" aria-hidden="true">·</span>
+        <span>Tekan <kbd>1</kbd>–<kbd>5</kbd> untuk aksi, <kbd>Esc</kbd> untuk menutup jendela.</span>
+      </footer>
+    </div>
+
+    <div id="modal-root"></div>
+    <div id="toast-root" class="toast-root" role="status" aria-live="polite" aria-atomic="false"></div>
+    <p class="sr-only" id="a11y-status" role="status" aria-live="polite"></p>
+
+    <script type="module" src="src/js/main.js"></script>
+    <noscript
+      ><p class="nojs">Permainan ini butuh JavaScript. Aktifkan JavaScript lalu muat ulang halaman.</p></noscript
+    >
+  </body>
+</html>

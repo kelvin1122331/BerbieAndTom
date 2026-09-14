@@ -1,0 +1,796 @@
+/* ============================================================
+   Karakter: ekspresi, animasi idle, busana, aksesori, noda
+   ============================================================ */
+
+.char {
+  overflow: visible;
+}
+
+.char-anchor {
+  cursor: pointer;
+  /* titik (0,0) = telapak kaki karakter di koordinat panggung */
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: transform 900ms var(--ease);
+  will-change: transform;
+}
+
+.char-body {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.char--barbie .barbie__head {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scale(0.9);
+}
+
+/* ---------- busana & aksesori: hanya yang aktif yang tampil ---------- */
+
+.char [data-outfit],
+.char [data-acc] {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 260ms var(--ease), visibility 260ms var(--ease);
+}
+
+.char[data-outfit="bulu-alami"] [data-outfit="bulu-alami"],
+.char[data-outfit="piyama-bintang"] [data-outfit="piyama-bintang"],
+.char[data-outfit="hoodie-pink"] [data-outfit="hoodie-pink"],
+.char[data-outfit="setelan-hitam"] [data-outfit="setelan-hitam"],
+.char[data-outfit="gaun-pink"] [data-outfit="gaun-pink"],
+.char[data-outfit="gaun-hitam"] [data-outfit="gaun-hitam"],
+.char[data-outfit="set-kasual"] [data-outfit="set-kasual"],
+.char[data-outfit="gaun-puteri"] [data-outfit="gaun-puteri"],
+.char[data-outfit="piyama-sutra"] [data-outfit="piyama-sutra"],
+.char[data-acc="pita-panda"] [data-acc="pita-panda"],
+.char[data-acc="kacamata-panda"] [data-acc="kacamata-panda"],
+.char[data-acc="topi-panda"] [data-acc="topi-panda"],
+.char[data-acc="tas-bambu"] [data-acc="tas-bambu"],
+.char[data-acc="mahkota-berbie"] [data-acc="mahkota-berbie"],
+.char[data-acc="kacamata-berbie"] [data-acc="kacamata-berbie"],
+.char[data-acc="tas-mini"] [data-acc="tas-mini"],
+.char[data-acc="tongkat-sihir"] [data-acc="tongkat-sihir"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* topi & kacamata harus di atas rambut: pastikan urutan z (SVG = urutan DOM) sudah benar */
+.char[data-acc] .glasses {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ---------- mata & kelopak: kedip otomatis ---------- */
+
+.char .eyes__lid,
+.char .eyes__happy,
+.char .eyes__closed,
+.char .eyes__sad,
+.char .eyes__sick,
+.char .eyes__tear {
+  opacity: 0;
+}
+
+.char .eyes__open {
+  opacity: 1;
+}
+
+.char[data-mood="calm"] .eyes__lid,
+.char[data-mood="joy"] .eyes__lid {
+  animation: blink 5.4s steps(1, end) infinite;
+}
+
+.char[data-mood="hungry"] .eyes__lid,
+.char[data-mood="dirty"] .eyes__lid {
+  animation: blink 4.2s steps(1, end) infinite 0.7s;
+}
+
+@keyframes blink {
+  0%,
+  93.5%,
+  100% {
+    opacity: 0;
+  }
+  94.5%,
+  97.5% {
+    opacity: 1;
+  }
+}
+
+.char[data-mood="joy"] .eyes__open,
+.char[data-mood="joy"] ~ * .eyes__open {
+  opacity: 1;
+}
+
+.char[data-mood="joy"] .eyes__happy {
+  opacity: 1;
+}
+
+.char[data-mood="joy"] .eyes__open {
+  opacity: 0;
+}
+
+.char[data-mood="sad"] .eyes__sad,
+.char[data-mood="sick"] .eyes__sad {
+  opacity: 1;
+}
+
+.char[data-mood="sad"] .eyes__open,
+.char[data-mood="sick"] .eyes__open {
+  opacity: 0;
+}
+
+.char[data-mood="sad"] .eyes__tear,
+.char[data-mood="sick"] .eyes__tear {
+  opacity: 1;
+  animation: tear-drop 3.4s var(--ease) infinite;
+}
+
+.char[data-mood="sick"] .eyes__sick {
+  opacity: 1;
+}
+
+.char[data-mood="tired"] .eyes__closed {
+  opacity: 1;
+}
+
+.char[data-mood="tired"] .eyes__open {
+  opacity: 0.35;
+}
+
+.char[data-mood="sleep"] .eyes__closed,
+.stage.is-sleeping .char .eyes__closed {
+  opacity: 1;
+}
+
+.char[data-mood="sleep"] .eyes__open {
+  opacity: 0;
+}
+
+.char[data-mood="sleep"] .eyes__lid {
+  animation: none;
+  opacity: 0;
+}
+
+.stage.is-sleeping .char .eyes__open {
+  opacity: 0;
+}
+
+.stage.is-sleeping .char .eyes__lid {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes tear-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+/* mata mengikuti pointer (efek "hidup") */
+.char .eyes__iris {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 320ms var(--ease);
+}
+
+/* ---------- mulut per ekspresi ---------- */
+
+.char .mouth > * {
+  opacity: 0;
+}
+
+.char[data-mood="calm"] .mouth__calm,
+.char[data-mood="dirty"] .mouth__calm,
+.char[data-mood="tired"] .mouth__calm {
+  opacity: 1;
+}
+
+.char[data-mood="joy"] .mouth__joy,
+.char[data-mood="joy"] .mouth__joy-t {
+  opacity: 1;
+}
+
+.char[data-mood="sad"] .mouth__sad {
+  opacity: 1;
+}
+
+.char[data-mood="hungry"] .mouth__sad,
+.char[data-mood="sick"] .mouth__sick {
+  opacity: 1;
+}
+
+.char[data-mood="sleep"] .mouth__sleep {
+  opacity: 1;
+}
+
+/* sedang makan / minum menimpa ekspresi dasar */
+.char.is-eating .mouth > * {
+  opacity: 0;
+}
+
+.char.is-eating .mouth__open,
+.char.is-eating .mouth__tongue {
+  opacity: 1;
+}
+
+.char.is-eating .mouth__open {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: chew 420ms var(--ease) infinite;
+}
+
+.char.is-eating .mouth__tongue {
+  animation: chew 420ms var(--ease) infinite 80ms;
+}
+
+@keyframes chew {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* ---------- animasi idle ---------- */
+
+.anim-breathe {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: breathe 4.4s var(--ease) infinite;
+}
+
+.anim-head {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: head-sway 6.2s var(--ease) infinite;
+}
+
+.anim-arm-l,
+.anim-arm-r {
+  transform-box: fill-box;
+  transform-origin: center top;
+}
+
+.anim-arm-l {
+  animation: arm-sway 4.8s var(--ease) infinite;
+}
+
+.anim-arm-r {
+  animation: arm-sway 4.8s var(--ease) infinite -2.4s;
+}
+
+.anim-leg-l,
+.anim-leg-r {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.anim-ear-l,
+.anim-ear-r {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: ear-twitch 6.5s var(--ease) infinite;
+}
+
+.anim-ear-r {
+  animation-delay: -3.1s;
+}
+
+.char--barbie .anim-ear-l,
+.char--barbie .anim-ear-r {
+  animation: none;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.018, 1.012);
+  }
+}
+
+@keyframes head-sway {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(-2px, -1.5px) rotate(-1.4deg);
+  }
+  70% {
+    transform: translate(2px, 1px) rotate(1.4deg);
+  }
+}
+
+@keyframes arm-sway {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes ear-twitch {
+  0%,
+  86%,
+  100% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(-9deg);
+  }
+  94% {
+    transform: rotate(5deg);
+  }
+}
+
+/* ---------- reaksi terhadap aksi ---------- */
+
+.char.is-happy .anim-breathe {
+  animation: bounce-happy 620ms var(--spring) 2;
+}
+
+@keyframes bounce-happy {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    transform: translateY(-16px) scale(1.03, 0.98);
+  }
+  60% {
+    transform: translateY(2px) scale(0.98, 1.03);
+  }
+}
+
+.char.is-dancing .anim-breathe,
+.char.is-dancing .anim-head {
+  animation-duration: 1.1s;
+}
+
+.char.is-eating .anim-head {
+  animation: head-nom 700ms var(--ease) infinite;
+}
+
+@keyframes head-nom {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(4px) rotate(2deg);
+  }
+}
+
+.stage.is-sleeping .anim-breathe {
+  animation: breathe-slow 4.6s var(--ease) infinite;
+}
+
+.stage.is-sleeping .anim-head {
+  animation: head-doz 4.6s var(--ease) infinite;
+}
+
+.stage.is-sleeping .anim-arm-l,
+.stage.is-sleeping .anim-arm-r,
+.stage.is-sleeping .anim-ear-l,
+.stage.is-sleeping .anim-ear-r {
+  animation: none;
+}
+
+@keyframes breathe-slow {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.03, 1.022);
+  }
+}
+
+@keyframes head-doz {
+  0%,
+  100% {
+    transform: translateY(2px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(6px) rotate(8deg);
+  }
+}
+
+/* barang genggam disimpan saat mandi & tidur */
+.char__item {
+  transition: opacity 400ms var(--ease);
+}
+
+.stage.mode-bath .char__item,
+.stage.is-sleeping .char__item {
+  opacity: 0;
+}
+
+/* ---------- lapisan efek umum ---------- */
+
+.char .fx {
+  opacity: 0;
+  transition: opacity 420ms var(--ease);
+  pointer-events: none;
+}
+
+.char .fx--dirt {
+  opacity: var(--dirt, 0);
+  transition: opacity 600ms var(--ease);
+}
+
+.char .fx--sparkle {
+  opacity: var(--sparkle, 0);
+}
+
+.char .fx--stink {
+  opacity: var(--stink, 0);
+}
+
+.char .fx--sweat {
+  opacity: var(--sweat, 0);
+}
+
+.char .fx--wet {
+  opacity: var(--wet, 0);
+}
+
+.char .fx--sleep {
+  opacity: var(--sleepy, 0);
+}
+
+.char .fx--hearts {
+  opacity: var(--hearts, 0);
+}
+
+.char .fx--bubbles {
+  opacity: var(--bubbles, 0);
+}
+
+.char .fx--sparkle .spark {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sparkle 1.9s var(--ease) infinite;
+}
+
+.char .fx--sparkle .sp2 {
+  animation-delay: 0.5s;
+}
+.char .fx--sparkle .sp3 {
+  animation-delay: 1s;
+}
+.char .fx--sparkle .sp4 {
+  animation-delay: 1.4s;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1) rotate(28deg);
+  }
+}
+
+.char .fx--stink .stink {
+  animation: stink-rise 3.4s var(--ease) infinite;
+}
+.char .fx--stink .s2 {
+  animation-delay: -1.1s;
+}
+.char .fx--stink .s3 {
+  animation-delay: -2.2s;
+}
+
+@keyframes stink-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  40% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+}
+
+.char .fx--sweat path:first-child {
+  animation: sweat-drip 2.6s var(--ease) infinite;
+}
+
+@keyframes sweat-drip {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+.char .fx--wet .drop {
+  animation: sweat-drip 1.9s var(--ease) infinite;
+}
+.char .fx--wet .d2 {
+  animation-delay: -0.7s;
+}
+.char .fx--wet .d3 {
+  animation-delay: -1.3s;
+}
+
+.char .fx--bubbles .bubble {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bubble-float 4.2s var(--ease) infinite;
+}
+
+.char .fx--bubbles .b1 {
+  animation-delay: -0.6s;
+}
+.char .fx--bubbles .b2 {
+  animation-delay: -1.2s;
+}
+.char .fx--bubbles .b3 {
+  animation-delay: -1.8s;
+}
+.char .fx--bubbles .b4 {
+  animation-delay: -2.4s;
+}
+.char .fx--bubbles .b5 {
+  animation-delay: -3s;
+}
+
+@keyframes bubble-float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 20px) scale(0.7);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -120px) scale(1.15);
+  }
+}
+
+.char .zzz text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 44px;
+  fill: #fff2f8;
+  opacity: 0;
+}
+
+.char .zzz--1 text {
+  animation: zzz 3.6s var(--ease) infinite;
+}
+.char .zzz--2 text {
+  animation: zzz 3.6s var(--ease) infinite 1.2s;
+}
+.char .zzz--3 text {
+  animation: zzz 3.6s var(--ease) infinite 2.4s;
+}
+
+@keyframes zzz {
+  0% {
+    opacity: 0;
+    transform: translate(0, 10px) scale(0.7);
+  }
+  25% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(26px, -60px) scale(1.15);
+  }
+}
+
+.char .fx--hearts .heart {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: heart-up 3.2s var(--ease) infinite;
+}
+.char .fx--hearts .h2 {
+  animation-delay: -1s;
+}
+.char .fx--hearts .h3 {
+  animation-delay: -2s;
+}
+
+@keyframes heart-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.6);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-70px) scale(1.1) rotate(8deg);
+  }
+}
+
+.char .shadow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: shadow-pulse 4.4s var(--ease) infinite;
+}
+
+@keyframes shadow-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.26;
+  }
+  50% {
+    transform: scale(0.94, 0.9);
+    opacity: 0.2;
+  }
+}
+
+.stage.is-sleeping .char .shadow {
+  animation: none;
+}
+
+/* ---------- noda & mode mandi ---------- */
+
+.dirt-spot {
+  cursor: default;
+  pointer-events: none;
+}
+
+.dirt-spot__blob {
+  fill: url(#gradDirt);
+  opacity: 0.82;
+}
+
+.dirt-spot__blob--2 {
+  opacity: 0.66;
+}
+
+.dirt-spot__blob--3 {
+  opacity: 0.52;
+}
+
+.dirt-spot__art {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 260ms var(--ease), opacity 260ms var(--ease);
+}
+
+.dirt-spot.is-gone .dirt-spot__art {
+  transform: scale(0.1);
+  opacity: 0;
+}
+
+.dirt-spot.is-gone {
+  pointer-events: none;
+}
+
+.stage.mode-bath .char-anchor {
+  cursor: none;
+}
+
+.stage.mode-bath .dirt-spot {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.stage.mode-bath .dirt-spot .dirt-spot__hit {
+  fill: rgba(255, 255, 255, 0.001);
+}
+
+.stage.mode-bath .dirt-spot:not(.is-gone) .dirt-spot__art {
+  animation: dirt-ready 1.8s var(--ease) infinite;
+}
+
+@keyframes dirt-ready {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+.stage.mode-bath .dirt-spot:hover .dirt-spot__art {
+  transform: scale(0.72);
+  opacity: 0.55;
+}
+
+.stage.mode-bath .char .fx--bubbles {
+  opacity: 1;
+}
+
+.stage.mode-bath .char .fx--wet {
+  opacity: 0.9;
+}
+
+/* karakter sedikit bergoyang saat digosok */
+.stage.mode-bath .char-body {
+  animation: tub-splash 2.6s var(--ease) infinite;
+}
+
+@keyframes tub-splash {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-3px, 2px) rotate(-1.2deg);
+  }
+  75% {
+    transform: translate(3px, -1px) rotate(1.2deg);
+  }
+}
+
+/* ---------- kartu pilih karakter ---------- */
+
+.char--standalone {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.char--standalone .char__ground {
+  opacity: 0.35;
+}
+
+/* ---------- utilitas ---------- */
+
+.is-hidden {
+  display: none !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* area sentuh noda hanya aktif saat mode mandi */
+.stage.mode-bath .dirt-spot__hit {
+  pointer-events: all;
+}
+
+.dirt-spot.is-gone .dirt-spot__hit,
+.dirt-spot.is-gone .dirt-spot__art {
+  pointer-events: none;
+}
+
+/* karakter tersenyum lebar saat sedang senang akibat hadiah */
+.char.is-happy .eyes__happy {
+  opacity: 1;
+}
+
+.char.is-happy .eyes__open {
+  opacity: 0;
+}

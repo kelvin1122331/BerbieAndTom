@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Berbie and Tom">
+  <rect width="64" height="64" rx="16" fill="#160f1d" />
+  <circle cx="20" cy="19" r="8" fill="#1a1420" />
+  <circle cx="44" cy="19" r="8" fill="#1a1420" />
+  <circle cx="32" cy="36" r="17" fill="#fff6fa" />
+  <ellipse cx="25" cy="33" rx="4.6" ry="5.4" fill="#1a1420" />
+  <ellipse cx="39" cy="33" rx="4.6" ry="5.4" fill="#1a1420" />
+  <circle cx="23.6" cy="31.4" r="1.6" fill="#fff" />
+  <circle cx="37.6" cy="31.4" r="1.6" fill="#fff" />
+  <path d="M32 40q4 5 8 1" stroke="#1a1420" stroke-width="2.4" fill="none" stroke-linecap="round" />
+  <path d="M46 8c-4 2-6 5-6 8 3 0 6-2 8-5" fill="#ff5fae" />
+  <path d="M12 50c5 4 9 6 12 9 3-3 7-5 12-9" stroke="#ff5fae" stroke-width="3" fill="none" stroke-linecap="round" />
+</svg>
